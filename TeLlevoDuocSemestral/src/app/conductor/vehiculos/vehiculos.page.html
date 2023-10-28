@@ -1,0 +1,46 @@
+<ion-header [translucent]="true">
+
+  <div class="content-center">
+
+    <h1 class="ion-text-center">Conductor </h1>
+  </div>
+
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+
+    <ion-row>
+      <ion-col size="12">
+        <h4 class="ion-text-center">Es hora de seleccionar tu vehículo principal</h4>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6" *ngFor="let vehiculo of listaVehiculos">
+        <ion-card>
+
+          <ion-card-header>
+            <ion-card-title>{{ vehiculo.vehiculo.marca_vehiculo.descripcion }}
+              <span class="ion-pl-10">{{vehiculo.vehiculo.modelo }}</span>
+            </ion-card-title>
+
+
+          </ion-card-header>
+          <ion-card-content>
+            <p><strong>Patente:</strong> {{ vehiculo.vehiculo.patente }}</p>
+            <p><strong>Capacidad:</strong> {{ vehiculo.vehiculo.capacidad }}</p>
+          </ion-card-content>
+          <ion-button expand="full" (click)="seleccionar(vehiculo.vehiculo)">Seleccionar</ion-button>
+        </ion-card>
+
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="vehiculoPrincipal">
+      <ion-col size="12">
+        <h4 class="ion-text-center">¿Deseas que tu vehiculo principal sea {{vehiculoPrincipal.marca_vehiculo.descripcion}} {{vehiculoPrincipal.modelo}}   ?</h4>
+        <ion-button expand="full" (click)="modificarVehiculoPrincipal()">Enviar</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

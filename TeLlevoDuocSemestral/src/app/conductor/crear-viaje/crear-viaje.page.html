@@ -1,0 +1,58 @@
+<ion-header [translucent]="true">
+
+  <div class="content-center">
+
+    <h1 class="ion-text-center">Crear viaje </h1>
+  </div>
+
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Origen</ion-label>
+          <ion-input type="text" [(ngModel)]="origen"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Destino</ion-label>
+          <ion-input type="text" [(ngModel)]="destino_conductor"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-checkbox [(ngModel)]=usarVehiculoPrincipal>Deseo utilizar mi vehiculo principal</ion-checkbox>
+          <ion-input type="hidden" [(ngModel)]="vehiculoSeleccionado"></ion-input>
+       
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="!usarVehiculoPrincipal">
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Vehiculo</ion-label>
+          <ion-select [(ngModel)]="vehiculoSeleccionado" name="vehiculoSeleccionado">
+            <ion-select-option *ngFor="let vehiculo of listaVehiculos" [value]="(vehiculo.vehiculo.id)">
+              {{vehiculo.vehiculo.patente}} ({{vehiculo.vehiculo.marca_vehiculo.descripcion}}
+              {{vehiculo.vehiculo.modelo}})
+
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-button expand="block" color="primary" (click)="publicarViaje()">Crear viaje</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

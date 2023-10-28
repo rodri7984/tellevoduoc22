@@ -1,0 +1,7 @@
+{
+  "name": "TeLlevoDuocSemestral",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

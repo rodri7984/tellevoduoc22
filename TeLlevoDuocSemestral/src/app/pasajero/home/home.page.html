@@ -1,0 +1,45 @@
+<ion-header [translucent]="true">
+
+  <div class="content-center">
+
+    <h1 class="ion-text-center">Pasajero </h1>
+  </div>
+
+</ion-header>
+
+<ion-content>
+  <ion-row *ngIf="viajes">
+    <ion-col size="12" size-md="10" offset-md="1">
+      <ion-card *ngFor="let viaje of viajes">
+        <ion-card-header>
+          <h3>Detalles del Viaje</h3>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="auto-layout">
+            <div class="fila-delantera">
+              <div class="asiento conductor">
+                <img src="../../../assets/asientos/asiento-conductor.png" alt="Conductor">
+              </div>
+              <div class="asiento" *ngFor="let asiento of viaje.detalle_viaje.slice(0, 1); let i = index"
+                (click)="seleccionarAsiento(asiento.id)">
+                <img
+                  [src]="asientoSeleccionado === asiento.id ? '../../../assets/asientos/asiento-seleccionado.png' : (asiento.pasajero_id ? '../../../assets/asientos/asiento-ocupado.png' : '../../../assets/asientos/asiento-disponible.png')"
+                  alt="{{ asiento.pasajero_id ? 'Ocupado' : 'Disponible' }}">
+              </div>
+            </div>
+            <div class="fila-asientos">
+              <div class="asiento" *ngFor="let asiento of viaje.detalle_viaje.slice(1, 5); let i = index"
+                (click)="seleccionarAsiento(asiento.id)">
+                <img
+                  [src]="asientoSeleccionado === asiento.id ? '../../../assets/asientos/asiento-seleccionado.png' : (asiento.pasajero_id ? '../../../assets/asientos/asiento-ocupado.png' : '../../../assets/asientos/asiento-disponible.png')"
+                  alt="{{ asiento.pasajero_id ? 'Ocupado' : 'Disponible' }}">
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-content>
+
+

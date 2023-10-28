@@ -1,0 +1,41 @@
+:root {
+    --espacio-entre-asientos: 10px;
+    --espacio-entre-filas: 10px;
+    --espacio-entre-filas-delanteras: 10px;
+    --medida: 80px;
+}
+
+
+.fila-asientos {
+    display: flex;
+    justify-content: center;
+    gap: var(--espacio-entre-asientos);
+    /* Agregar espacio entre los asientos */
+}
+
+.fila-delantera {
+    display: flex;
+    justify-content: center;
+    gap: var(--espacio-entre-asientos);
+    /* Agregar espacio entre los asientos */
+}
+
+.asiento {
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+.asiento.conductor {
+    background-color: #007bff;
+    color: white;
+}
+
+.asiento.disponible {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.asiento.ocupado {
+    background-color: #F44336;
+    color: white;
+}

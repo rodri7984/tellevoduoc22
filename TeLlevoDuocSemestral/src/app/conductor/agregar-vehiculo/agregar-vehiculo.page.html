@@ -1,0 +1,77 @@
+<ion-header [translucent]="true">
+
+  <div class="content-center">
+    <h1 class="ion-text-center">Agregar vehículo</h1>
+  </div>
+
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Patente</ion-label>
+          <ion-input type="text" [(ngModel)]="patente" placeholder="Ingrese su patente..."></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Capacidad</ion-label>
+          <ion-input type="text" [(ngModel)]="capacidad" placeholder="Ingrese su capacidad..."></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-select [(ngModel)]="selectedMarca">
+            <ion-select-option *ngFor="let marca of marcas" [value]="marca.id">{{ marca.descripcion
+              }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Modelo</ion-label>
+          <ion-input type="text" [(ngModel)]="modelo" placeholder="Ingrese su modelo..."></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Color</ion-label>
+          <ion-input type="text" [(ngModel)]="color" placeholder="Ingrese su color..."></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Año</ion-label>
+          <ion-input type="text" [(ngModel)]="anno" placeholder="Ingrese su anno..."></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-button expand="full" color='primary' (click)="addVehiculo()">Registrar</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button expand="full" color='danger' (click)="logout()">
+          <ion-icon name="exit-outline"></ion-icon>&nbsp;Cerrar sesión</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
