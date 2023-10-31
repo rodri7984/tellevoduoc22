@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { api_url, DB_PASSWORD } from 'db_info';
+import { SUPABASE_URL, SUPABASE_PASSWORD } from 'apiInfo';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +14,9 @@ export class UsuarioService {
   ) { }
 
   getUserInfo(username: string, password: string): Observable<any> {
-    const URL = `${api_url}/usuario?username=eq.${username}&password=eq.${password}`;;
+    const URL = `${SUPABASE_URL}/usuario?username=eq.${username}&password=eq.${password}`;;
     const headers = new HttpHeaders({
-      'apikey': `${DB_PASSWORD}`,
+      'apikey': `${SUPABASE_PASSWORD}`,
     });
     return this.httpClient.get(URL, { headers }).pipe(
       catchError((error) => {
@@ -26,9 +26,9 @@ export class UsuarioService {
     );
   }
   patchUserType(id: number, tipo_usuario: string): Observable<any> {
-    const URL = `${api_url}/usuario?id=eq.${id}`;
+    const URL = `${SUPABASE_URL}/usuario?id=eq.${id}`;
     const headers = new HttpHeaders({
-      'apikey': `${DB_PASSWORD}`,
+      'apikey': `${SUPABASE_PASSWORD}`,
     });
     const body = {
       tipo_usuario: tipo_usuario
@@ -40,10 +40,24 @@ export class UsuarioService {
       })
     );
   }
-  addUser(tabla: string, data:any): Observable<any> {
-    const URL = `${api_url}/${tabla}`;
+  getConductorInfo(id: number): Observable<any> {
+    const URL = `${SUPABASE_URL}/usuario?select=*,conductor(*)&id=eq.${id}`;
     const headers = new HttpHeaders({
-      'apikey': `${DB_PASSWORD}`,
+      'apikey': `${SUPABASE_PASSWORD}`,
+    });
+    
+    return this.httpClient.get(URL, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error);
+        return throwError('No se pudo acceder a la base de datos');
+      })
+    );
+  }
+
+  addUser(tabla: string, data:any): Observable<any> {
+    const URL = `${SUPABASE_URL}/${tabla}`;
+    const headers = new HttpHeaders({
+      'apikey': `${SUPABASE_PASSWORD}`,
     });
     
     return this.httpClient.post(URL, data, { headers }).pipe(
@@ -55,9 +69,9 @@ export class UsuarioService {
   }
 
   register(data:any): Observable<any> {
-    const URL = `${api_url}/usuario`;
+    const URL = `${SUPABASE_URL}/usuario`;
     const headers = new HttpHeaders({
-      'apikey': `${DB_PASSWORD}`,
+      'apikey': `${SUPABASE_PASSWORD}`,
     });
     
     return this.httpClient.post(URL, data, { headers }).pipe(
@@ -69,9 +83,9 @@ export class UsuarioService {
   }
   
   getInfoPasajero(id: number): Observable<any> {
-    const URL = `${api_url}/usuario?select=*,pasajero(*)&id=eq.${id}`;
+    const URL = `${SUPABASE_URL}/usuario?select=*,pasajero(*)&id=eq.${id}`;
     const headers = new HttpHeaders({
-      'apikey': `${DB_PASSWORD}`,
+      'apikey': `${SUPABASE_PASSWORD}`,
     });
     
     return this.httpClient.get(URL, { headers }).pipe(

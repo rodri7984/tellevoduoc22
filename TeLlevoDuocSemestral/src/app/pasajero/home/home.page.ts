@@ -1,5 +1,7 @@
 import { NumberSymbol } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { ViajesService } from 'src/app/services/viajes.service';
 
@@ -19,23 +21,37 @@ export class HomePage implements OnInit {
   constructor(
     private _user: UsuarioService,
     private _viajes: ViajesService,
+    private _auth: AuthService,
+    private router: Router
 
 
   ) { }
 
   ngOnInit() {
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser !== null) {
-      this.userInfo = JSON.parse(currentUser);
-    }
-    this.infoPasajero(this.userInfo.id);
 
-    this.getViajes();
+    this._auth.getCurrentUser().then(user => {
+      if (user) {
+        this.userInfo = user;
+        console.log(this.userInfo);
+        //Inicio metodos
+
+        this.infoPasajero(this.userInfo.id);
+        this.getViajes();
+        setTimeout(() => {
+          this.getViajes();
+
+        }, 10000);
+        //Fin metodos
+      } else {
+      }
+    });
   }
 
 
   getViajes() {
-    this._viajes.getDetalleViajePorEstado('pendiente')
+    const date = new Date();
+    const fecha = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    this._viajes.getViajesActivos(fecha)
       .subscribe(
         (data) => {
           this.viajes = data;
@@ -46,7 +62,6 @@ export class HomePage implements OnInit {
   }
 
   seleccionarAsiento(id_viaje: number) {
-
     console.log('Seleccionando asiento :', id_viaje);
     this._viajes.getAsiento(id_viaje).subscribe(
       (data) => {
@@ -56,6 +71,7 @@ export class HomePage implements OnInit {
       }
     );
   }
+
 
   divideAsientos(array: any[], groupSize: number) {
     const groups = [];
@@ -85,9 +101,12 @@ export class HomePage implements OnInit {
       }
     );
   }
+
   reservarAsiento() {
-    const datos:any = {"pasajero_id": `${this.idPasajero}`,
-    "destino": "Casa",}
+    const datos: any = {
+      "pasajero_id": `${this.idPasajero}`,
+      "destino": "Casa",
+    }
     this._viajes.reservarAsiento(this.asientoSeleccionado, datos)
       .subscribe(
         (data) => {
@@ -100,9 +119,18 @@ export class HomePage implements OnInit {
           console.log(datos);
           this.asientoSeleccionado = 0;
         }
-        
       );
   }
 
+  cerrarSesion() {
+    this.userInfo = '';
+    this.viajes = [];
+    this.detalleViaje = [];
+    this.asientosSeleccionados = [];
+    this.asientoSeleccionado = 0;
+    this.idPasajero = 0;
+    this._auth.logout();
+    this.router.navigateByUrl('login');
+  }
 
 }

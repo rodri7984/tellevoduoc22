@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 import { VehiculoService } from 'src/app/services/vehiculo.service';
 import { ViajesService } from 'src/app/services/viajes.service';
 @Component({
@@ -9,14 +10,14 @@ import { ViajesService } from 'src/app/services/viajes.service';
 })
 export class CrearViajePage implements OnInit {
 
-  
+
   usarVehiculoPrincipal: boolean = true;
   infoConductor: any = '';
   listaVehiculos: any = '';
   userInfo: any = ''; //obtenemos la info del usuario logeado
   autoPrincipal: any = ''; //obtenemos el auto principal del usuario logeado
   fecha: Date = new Date();
-
+  valor: number = 0;
   fecha_inicio: string = '';
   origen: string = "Duoc UC, Viña del Mar";
   destino_conductor: string = '';
@@ -25,27 +26,34 @@ export class CrearViajePage implements OnInit {
   constructor(
     private _vehiculo: VehiculoService,
     private _viajes: ViajesService,
-    private router: Router
+    private router: Router,
+    private _auth: AuthService,
   ) { }
 
   ngOnInit() {
 
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser !== null) {
-      this.userInfo = JSON.parse(currentUser);
-    }
-    this._vehiculo.getAutos(this.userInfo.id)
-      .subscribe(
-        (data) => {
-          this.infoConductor = data[0].conductor;
-          this.autoPrincipal = data[0].conductor.id_vehiculo_principal;
-          this.listaVehiculos = data[0].conductor.conductor_vehiculo;
-          console.log(this.infoConductor);
-          console.log(this.listaVehiculos)
-        }
-      );
-
+    this._auth.getCurrentUser().then(user => {
+      if (user) {
+        this.userInfo = user;
+        console.log(this.userInfo);
+        //Inicio metodos
+        this._vehiculo.getAutos(this.userInfo.id)
+          .subscribe(
+            (data) => {
+              this.infoConductor = data[0].conductor;
+              this.autoPrincipal = data[0].conductor.id_vehiculo_principal;
+              this.listaVehiculos = data[0].conductor.conductor_vehiculo;
+              console.log(this.infoConductor);
+              console.log(this.listaVehiculos)
+            }
+          );
+        //Fin metodos
+      } else {
+        this.router.navigateByUrl('login');
+      }
+    });
   }
+
   publicarViaje() {
     let now: Date = new Date();
     if (this.destino_conductor !== '' || this.vehiculoSeleccionado !== '') {
@@ -60,13 +68,14 @@ export class CrearViajePage implements OnInit {
         "conductor_id": this.infoConductor.id,
         "fecha_inicio": this.fecha_inicio,
         "origen": this.origen,
-        "hora_inicio" : horaInicio,
+        "valor": this.valor,
+        "hora_inicio": horaInicio,
         "destino_conductor": this.destino_conductor,
         "vehiculo_id": this.vehiculoSeleccionado,
-        "estado" : "pendiente",
+        "estado": "pendiente",
       }
       console.log(contenido);
-      
+
       this._viajes.postViaje(contenido)
         .subscribe(
           (respuesta) => {
@@ -77,11 +86,15 @@ export class CrearViajePage implements OnInit {
           },
           (error) => {
             console.log('Error al crear viaje', error)
-            
+
           }
         )
     } else {
       console.log('Debe llenar todos los campos');
     }
   }
+  volver() {
+    this.router.navigateByUrl('chome');
+  }
+
 }

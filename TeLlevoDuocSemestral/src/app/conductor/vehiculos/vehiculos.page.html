@@ -1,31 +1,38 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="false">
+  <ion-row>
+    <ion-col size="1">
+      <h1 class="boton-volver">
+        <ion-icon name="arrow-back-outline" (click)="volver()"></ion-icon>
+      </h1>
 
-  <div class="content-center">
+    </ion-col>
 
-    <h1 class="ion-text-center">Conductor </h1>
-  </div>
+    <ion-col size="10">
+      <div class="content-center">
+
+        <h1 class="ion-text-center">Vehículos</h1>
+      </div>
+    </ion-col>
+    <ion-col size="1">
+
+    </ion-col>
+  </ion-row>
 
 </ion-header>
-
-<ion-content [fullscreen]="true">
+<ion-content>
   <ion-grid>
-
     <ion-row>
       <ion-col size="12">
         <h4 class="ion-text-center">Es hora de seleccionar tu vehículo principal</h4>
       </ion-col>
     </ion-row>
-
-    <ion-row>
-      <ion-col size="6" *ngFor="let vehiculo of listaVehiculos">
+    <ion-row *ngIf="listaVehiculos!==0">
+      <ion-col size="12" *ngFor="let vehiculo of listaVehiculos">
         <ion-card>
-
           <ion-card-header>
             <ion-card-title>{{ vehiculo.vehiculo.marca_vehiculo.descripcion }}
               <span class="ion-pl-10">{{vehiculo.vehiculo.modelo }}</span>
             </ion-card-title>
-
-
           </ion-card-header>
           <ion-card-content>
             <p><strong>Patente:</strong> {{ vehiculo.vehiculo.patente }}</p>
@@ -33,14 +40,20 @@
           </ion-card-content>
           <ion-button expand="full" (click)="seleccionar(vehiculo.vehiculo)">Seleccionar</ion-button>
         </ion-card>
-
       </ion-col>
     </ion-row>
     <ion-row *ngIf="vehiculoPrincipal">
       <ion-col size="12">
-        <h4 class="ion-text-center">¿Deseas que tu vehiculo principal sea {{vehiculoPrincipal.marca_vehiculo.descripcion}} {{vehiculoPrincipal.modelo}}   ?</h4>
+        <h4 class="ion-text-center">¿Deseas que tu vehiculo principal sea
+          {{vehiculoPrincipal.marca_vehiculo.descripcion}} {{vehiculoPrincipal.modelo}} ?</h4>
         <ion-button expand="full" (click)="modificarVehiculoPrincipal()">Enviar</ion-button>
       </ion-col>
     </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button expand="full" (click)="agregarVehiculo()">Agregar vehiculo</ion-button>
+      </ion-col>
+    </ion-row>
+
   </ion-grid>
 </ion-content>

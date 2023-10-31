@@ -1,39 +1,64 @@
-<ion-header [translucent]="true">
-
+<ion-header [translucent]="false">
   <div class="content-center">
-
     <h1 class="ion-text-center">Conductor </h1>
   </div>
-
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content>
   <ion-grid>
-
-
     <ion-row>
       <ion-col size="12">
         <ion-button expand="block" color="primary" (click)="crearViaje()">Crear viaje</ion-button>
       </ion-col>
     </ion-row>
-    <ion-row *ngIf="viajes">
+    <ion-row *ngIf="viajes && viajes.length > 0">
       <ion-col size="12" size-md="10" offset-md="1">
         <ion-card *ngFor="let viaje of viajes">
           <ion-card-header>
             <h3>Detalles del Viaje</h3>
           </ion-card-header>
+          <ion-button class="desactivar-button" color="danger" (click)="desactivarViaje(viaje.id)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+          <ion-button class="cerrar-button" color="medium" (click)="cerrarViaje(viaje.id)">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+          </ion-button>
           <ion-card-content>
             <p><span class="titulo-propiedad">Conductor:</span> {{ viaje.conductor_id }}</p>
             <p><span class="titulo-propiedad">Destino:</span> {{ viaje.destino_conductor }}</p>
-            
+
             <p><span class="titulo-propiedad">Estado:</span> {{ viaje.estado }}</p>
             <p class="fecha-viaje">{{ viaje.fecha_inicio }}</p>
             <p><span class="titulo-propiedad">Hora de Inicio:</span> {{ viaje.hora_inicio }}</p>
             <p><span class="titulo-propiedad">ID:</span> {{ viaje.id }}</p>
             <p><span class="titulo-propiedad">Origen:</span> {{ viaje.origen }}</p>
-            <p><span class="titulo-propiedad">Vehículo ID:</span> {{ viaje.vehiculo.marca_vehiculo.descripcion }} {{ viaje.vehiculo.modelo }}</p>
+            <p><span class="titulo-propiedad">Vehículo ID:</span> {{ viaje.vehiculo.marca_vehiculo.descripcion }} {{
+              viaje.vehiculo.modelo }}</p>
           </ion-card-content>
         </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="(!viajes || viajes.length === 0 ) && cBusquedas>=2">
+      <ion-col size="12">
+        <h2 class="ion-text-center">Usted no tiene ningún viaje activo.</h2>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="(!viajes || viajes.length === 0 ) && cBusquedas<2">
+      <ion-col size="12">
+        <h2 class="ion-text-center">
+          <ion-spinner></ion-spinner><br>Cargando viajes...
+        </h2>
+
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button expand="block" color="secondary" (click)="seleccionarVehiculo()">Seleccionar Vehiculo</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button expand="block" color="danger" (click)="cerrarSesion()">Cerrar sesión</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

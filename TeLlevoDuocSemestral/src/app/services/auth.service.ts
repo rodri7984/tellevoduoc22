@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
+import { Preferences } from '@capacitor/preferences';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
+  private sesionKey = 'sesion';
 
-  private currentUser: any;
-
-  setCurrentUser(user: any) {
-    this.currentUser = user;
-    localStorage.setItem('currentUser', JSON.stringify(user));
+  async setCurrentUser(user: any) {
+    const userString = JSON.stringify(user);
+    await Preferences.set({ key: this.sesionKey, value: userString });
   }
 
-  getCurrentUser() {
-    return this.currentUser;
+  async getCurrentUser(): Promise<any> {
+    const { value } = await Preferences.get({ key: this.sesionKey });
+    return value ? JSON.parse(value) : null;
   }
 
-  logout(){
-    this.currentUser = null;
-    localStorage.removeItem('currentUser');
-    
+  async logout() {
+    await Preferences.remove({ key: this.sesionKey });
+    console.log('Cerrando sesión...');
   }
 }

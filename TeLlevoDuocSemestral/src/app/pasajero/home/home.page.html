@@ -10,7 +10,7 @@
 <ion-content>
   <ion-row *ngIf="viajes">
     <ion-col size="12" size-md="10" offset-md="1">
-      <ion-card *ngFor="let viaje of viajes">
+      <ion-card *ngFor="let viaje of viajes" [disabled]="viaje.estado === 'cerrado'">
 
         <ion-card-header>
           <h3>Detalles del viaje a {{ viaje.destino_conductor }}</h3>
@@ -19,18 +19,14 @@
           <ion-row>
             <ion-col size="9">
               <div class="info-section">
-                <!-- Sección de Información -->
                 <p>Conductor ID: {{ viaje.conductor_id }}</p>
                 <p>Destino: {{ viaje.destino_conductor }}</p>
                 <p>Estado: {{ viaje.estado }}</p>
                 <p>Fecha de Inicio: {{ viaje.fecha_inicio }}</p>
-                <!-- Otros detalles de información -->
               </div>
-
             </ion-col>
             <ion-col size="3">
               <div class="asientos-section">
-                <!-- Sección de Asientos -->
                 <div class="auto-layout">
                   <div class="fila-delantera">
                     <div class="asiento conductor">
@@ -59,10 +55,18 @@
             </ion-col>
           </ion-row>
         </ion-card-content>
-        <ion-button expand="full" color='primary' (click)="reservarAsiento()">
-          Elegir asiento</ion-button>
+        <ion-button expand="full"  color="primary" (click)="reservarAsiento()">
+          Elegir asiento
+        </ion-button>
       </ion-card>
     </ion-col>
+    <ion-col size="12" size-md="10" offset-md="1" *ngIf="!viajes || viajes.length === 0">
+      <p>No hay viajes disponibles aún.</p>
+    </ion-col>
   </ion-row>
-
+  <ion-row>
+    <ion-col size="12">
+      <ion-button expand="block" color="danger" (click)="cerrarSesion()">Cerrar sesión</ion-button>
+    </ion-col>
+  </ion-row>
 </ion-content>

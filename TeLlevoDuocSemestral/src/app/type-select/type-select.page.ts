@@ -19,15 +19,19 @@ export class TypeSelectPage implements OnInit {
     private _auth: AuthService,
     private router: Router,
   ) { }
-
   ngOnInit() {
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser !== null) {
-      this.userInfo = JSON.parse(currentUser);
-    }
-    if (currentUser !== null) {
-      this.userInfo = JSON.parse(currentUser);
-    }
+
+    this._auth.getCurrentUser().then(user => {
+      if (user) {
+        this.userInfo = user;
+        console.log(this.userInfo);
+        //Inicio metodos
+
+        //Fin metodos
+      } else {
+        this.router.navigateByUrl('login');
+      }
+    });
   }
 
   clickConductor(): void {
@@ -69,7 +73,10 @@ export class TypeSelectPage implements OnInit {
         }
       );
   }
-  cerrarSesion(){
+  cerrarSesion() {
+    this.userInfo = '';
+    this.selected = '';
+    this.type = '';
     this.router.navigateByUrl('login');
     this._auth.logout();
   }
