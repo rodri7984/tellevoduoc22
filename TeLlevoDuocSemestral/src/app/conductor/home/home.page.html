@@ -20,8 +20,9 @@
           <ion-button class="desactivar-button" color="danger" (click)="desactivarViaje(viaje.id)">
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>
-          <ion-button class="cerrar-button" color="medium" (click)="cerrarViaje(viaje.id)">
-            <ion-icon name="lock-closed-outline"></ion-icon>
+          <ion-button class="cerrar-button" color="medium" (click)="toggleViaje(viaje.id, viaje.estado)">
+            <ion-icon [name]="viaje.estado === 'cerrado' ? 'lock-closed-outline' : 'lock-open-outline'  "></ion-icon>
+
           </ion-button>
           <ion-card-content>
             <p><span class="titulo-propiedad">Conductor:</span> {{ viaje.conductor_id }}</p>

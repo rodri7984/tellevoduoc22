@@ -11,7 +11,7 @@ import { ViajesService } from 'src/app/services/viajes.service';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-
+  buscar: boolean = true;
   userInfo: any = '';
   id_viaje: any = '';
   listaVehiculos: any = '';
@@ -28,6 +28,7 @@ export class HomePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.buscar = true;
     this.cBusquedas = 0;
     this._auth.getCurrentUser().then(user => {
       if (user) {
@@ -44,18 +45,22 @@ export class HomePage implements OnInit {
                 console.log('Su vehiculo principal es:', vehiculoPrincipal);
               } else {
                 this.checkearVehiculos();
-
               }
             }
           );
-        if (this.viajes.length === 0) {
-          setTimeout(() => {
+        setInterval(() => {
+
+          if (this.viajes.length === 0 && this.buscar) {
             this.getViajes();
 
             this.cBusquedas++;
             console.log(this.cBusquedas);
-          }, 3000);
-        }
+            if (this.cBusquedas >= 3) {
+              this.buscar = !this.buscar
+            }
+
+          }
+        }, 3000);
         //Fin metodos
       } else {
         this.router.navigateByUrl('login');
@@ -72,6 +77,7 @@ export class HomePage implements OnInit {
 
   crearViaje() {
     this.router.navigateByUrl('crear-viaje');
+    this.buscar = true;
   }
 
   desactivarViaje(viajeId: number) {
@@ -86,6 +92,7 @@ export class HomePage implements OnInit {
           console.error('Error:', error);
         }
       );
+      this.cBusquedas = 0;
     } else {
       console.log('No se proporcionó un ID de viaje válido');
     }
@@ -103,8 +110,15 @@ export class HomePage implements OnInit {
 
   }
 
-  cerrarViaje(id_viaje : number) {
-    this._viajes.cerrarViaje(id_viaje).subscribe(
+  toggleViaje(id_viaje: number, estado: String) {
+    let nuevoEstado = ''
+    if (estado === "pendiente"){
+      nuevoEstado = "cerrado"
+    }
+    if (estado === "cerrado"){
+      nuevoEstado = "pendiente"
+    }
+    this._viajes.cerrarViaje(id_viaje, nuevoEstado).subscribe(
       (data) => {
         console.log(data);
         this.getViajes();

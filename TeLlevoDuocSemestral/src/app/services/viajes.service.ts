@@ -107,12 +107,12 @@ export class ViajesService {
       })
     );
   }
-  cerrarViaje(id_viaje: number): Observable<any> {
+  cerrarViaje(id_viaje: number, estado: String): Observable<any> {
     const URL = `${SUPABASE_URL}/viaje?id=eq.${id_viaje}`;
     const headers = new HttpHeaders({
       'apikey': `${SUPABASE_PASSWORD}`,
     });
-    const data = { "estado": "cerrado" }
+    const data = { "estado": estado }
     return this.httpClient.patch(URL, data, { headers }).pipe(
       catchError((error) => {
         console.error('Error:', error);

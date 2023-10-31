@@ -37,10 +37,10 @@ export class HomePage implements OnInit {
 
         this.infoPasajero(this.userInfo.id);
         this.getViajes();
-        setTimeout(() => {
+        setInterval(() => {
           this.getViajes();
 
-        }, 10000);
+        }, 5000);
         //Fin metodos
       } else {
       }
