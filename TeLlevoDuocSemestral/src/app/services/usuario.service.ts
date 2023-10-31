@@ -68,5 +68,18 @@ export class UsuarioService {
     );
   }
   
+  getInfoPasajero(id: number): Observable<any> {
+    const URL = `${api_url}/usuario?select=*,pasajero(*)&id=eq.${id}`;
+    const headers = new HttpHeaders({
+      'apikey': `${DB_PASSWORD}`,
+    });
+    
+    return this.httpClient.get(URL, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error);
+        return throwError('No se pudo acceder a la base de datos');
+      })
+    );
+  }
 
 }

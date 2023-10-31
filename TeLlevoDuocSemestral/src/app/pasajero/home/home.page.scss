@@ -9,20 +9,22 @@
 .fila-asientos {
     display: flex;
     justify-content: center;
-    gap: var(--espacio-entre-asientos);
     /* Agregar espacio entre los asientos */
 }
 
 .fila-delantera {
     display: flex;
     justify-content: center;
-    gap: var(--espacio-entre-asientos);
+
     /* Agregar espacio entre los asientos */
 }
 
 .asiento {
     text-align: center;
-    border: 1px solid #ccc;
+}
+.asiento img{
+    width: 62px;
+    height:62px;
 }
 
 .asiento.conductor {
@@ -38,4 +40,7 @@
 .asiento.ocupado {
     background-color: #F44336;
     color: white;
+}
+.auto-layout{
+    border: 1px solid black;
 }

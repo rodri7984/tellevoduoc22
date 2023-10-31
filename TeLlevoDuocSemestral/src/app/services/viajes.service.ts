@@ -80,4 +80,17 @@ export class ViajesService {
       })
     );
   }
+
+  reservarAsiento(id_detalle_viaje: number, data:string): Observable<any> {
+    const URL = `${api_url}/detalle_viaje?id=eq.${id_detalle_viaje}`;
+    const headers = new HttpHeaders({
+      'apikey': `${DB_PASSWORD}`,
+    });
+    return this.httpClient.patch(URL, data, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error:', error);
+        return throwError('No se pudo acceder a la base de datos');
+      })
+    );
+  }
 }
