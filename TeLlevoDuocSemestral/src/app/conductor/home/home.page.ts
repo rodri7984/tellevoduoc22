@@ -78,6 +78,7 @@ export class HomePage implements OnInit {
   crearViaje() {
     this.router.navigateByUrl('crear-viaje');
     this.buscar = true;
+    this.cBusquedas = 0 
   }
 
   desactivarViaje(viajeId: number) {

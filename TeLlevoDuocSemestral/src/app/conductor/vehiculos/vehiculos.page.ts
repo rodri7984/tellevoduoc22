@@ -29,18 +29,15 @@ export class VehiculosPage implements OnInit {
         this.userInfo = user;
         console.log(this.userInfo);
         //Inicio metodos
-        this._vehiculo.getAutos(this.userInfo.id)
-          .subscribe(
-            (data) => {
-              this.listaVehiculos = data[0].conductor.conductor_vehiculo;
-              console.log(this.listaVehiculos);
-            }
-          ); setTimeout(() => {
-            if (this.listaVehiculos.length === 0) {
-              this.router.navigateByUrl('agregar-vehiculo');
-            }
-          
-          }, 1000);
+        this.buscarAutos()
+        setTimeout(() => {
+          if (this.listaVehiculos.length === 0) {
+            this.router.navigateByUrl('agregar-vehiculo');
+          }
+          setInterval(() =>{
+            this.buscarAutos()
+          },1000);
+        }, 1000);
         //Fin metodos
       } else {
         this.router.navigateByUrl('login');
@@ -68,10 +65,20 @@ export class VehiculosPage implements OnInit {
 
   }
 
-  agregarVehiculo(){
+  buscarAutos(){
+    this._vehiculo.getAutos(this.userInfo.id)
+          .subscribe(
+            (data) => {
+              this.listaVehiculos = data[0].conductor.conductor_vehiculo;
+              console.log(this.listaVehiculos);
+            }
+          );
+  }
+
+  agregarVehiculo() {
     this.router.navigateByUrl('agregar-vehiculo');
   }
-  
+
   volver() {
     this.router.navigateByUrl('chome');
   }
