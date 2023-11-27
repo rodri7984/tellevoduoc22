@@ -3,8 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'map',
-    loadChildren: () => import('./map/map.module').then( m => m.MapPageModule)
+    path: 'mapa/:idAsiento?/:destino?', loadChildren: () => import('./map/map.module').then(m => m.MapPageModule)
   },
   {
     path: 'login',
@@ -13,37 +12,38 @@ const routes: Routes = [
 
   {
     path: '',
-    redirectTo: 'map',
+    redirectTo: 'mapa',
     pathMatch: 'full'
   },
   {
     path: 'register',
-    loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
+    loadChildren: () => import('./register/register.module').then(m => m.RegisterPageModule)
   },
   {
     path: 'type-select',
-    loadChildren: () => import('./type-select/type-select.module').then( m => m.TypeSelectPageModule)
+    loadChildren: () => import('./type-select/type-select.module').then(m => m.TypeSelectPageModule)
   },
   {
     path: 'chome',
-    loadChildren: () => import('./conductor/home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./conductor/home/home.module').then(m => m.HomePageModule)
   },
   {
     path: 'phome',
-    loadChildren: () => import('./pasajero/home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./pasajero/home/home.module').then(m => m.HomePageModule)
   },
   {
     path: 'vehiculos',
-    loadChildren: () => import('./conductor/vehiculos/vehiculos.module').then( m => m.VehiculosPageModule)
+    loadChildren: () => import('./conductor/vehiculos/vehiculos.module').then(m => m.VehiculosPageModule)
   },
   {
     path: 'agregar-vehiculo',
-    loadChildren: () => import('./conductor/agregar-vehiculo/agregar-vehiculo.module').then( m => m.AgregarVehiculoPageModule)
+    loadChildren: () => import('./conductor/agregar-vehiculo/agregar-vehiculo.module').then(m => m.AgregarVehiculoPageModule)
   },
   {
     path: 'crear-viaje',
-    loadChildren: () => import('./conductor/crear-viaje/crear-viaje.module').then( m => m.CrearViajePageModule)
+    loadChildren: () => import('./conductor/crear-viaje/crear-viaje.module').then(m => m.CrearViajePageModule)
   },
+
 
 ];
 

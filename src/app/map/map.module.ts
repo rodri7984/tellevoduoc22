@@ -11,6 +11,7 @@ import { MapPage } from './map.page';
 
 import { GoogleMaps } from '@ionic-native/google-maps/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { MapComponent } from './map.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -18,10 +19,10 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
     IonicModule,
     MapPageRoutingModule
   ],
-  declarations: [MapPage],
+  declarations: [MapPage, MapComponent],
   providers: [
     Geolocation, // Add Geolocation to the providers array
     GoogleMaps,
   ],
 })
-export class MapPageModule {}
+export class MapPageModule { }

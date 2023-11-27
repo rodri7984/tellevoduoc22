@@ -4,6 +4,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { ViajesService } from 'src/app/services/viajes.service';
 import { environment } from 'src/environments/environment';
+import { ModalController } from '@ionic/angular';
+import { MapPage } from 'src/app/map/map.page';
+import { EventoService } from 'src/app/services/evento.service';
+
 
 
 @Component({
@@ -18,16 +22,18 @@ export class HomePage implements OnInit {
   viajes: any[] = [];
   detalleViaje: any[] = [];
   asientosSeleccionados: number[] = [];
-  asientoSeleccionado: number = 0;
+  asientoSeleccionado: any = 0;
+  infoAsientoSeleccionado: any = {};
   idPasajero: number = 0;
+  destino_conductor: string = '';
 
   constructor(
     private _user: UsuarioService,
     private _viajes: ViajesService,
     private _auth: AuthService,
-    private router: Router
-
-
+    private router: Router,
+    private modalController: ModalController,
+    private eventoService: EventoService // Inyecta el servicio de eventos
   ) {
 
   }
@@ -47,13 +53,19 @@ export class HomePage implements OnInit {
 
         }, 5000);
         //Fin metodos
+        this.eventoService.obtenerDestino().subscribe((destino) => {
+          if (destino) {
+            // Puedes hacer lo que necesites con el destino recibido
+            console.log('Destino recibido en HomePage:', destino);
+            this.reservarAsiento(destino);
+          }
+        });
 
       } else {
       }
 
     });
   }
-
 
   getViajes() {
     const date = new Date();
@@ -73,10 +85,51 @@ export class HomePage implements OnInit {
     this._viajes.getAsiento(id_viaje).subscribe(
       (data) => {
         if (data[0].pasajero_id === null) {
-          this.asientoSeleccionado = id_viaje;
+          console.log(data[0])
+          this.infoAsientoSeleccionado = data[0];
+          this.asientoSeleccionado = this.infoAsientoSeleccionado.id
         }
       }
     );
+  }
+
+  async seleccionarDestinoPasajero() {
+    const modal = await this.modalController.create({
+      component: MapPage, // Asegúrate de importar el componente MapPage
+      componentProps: {
+        // Pasa cualquier parámetro que necesites al modal del mapa
+      },
+    });
+    modal.onDidDismiss().then((data: any) => {
+      // Maneja los datos devueltos por el modal del pasajero
+      if (data && data.ubicacionSeleccionada) {
+        const destinoSeleccionado = data.ubicacionSeleccionada.direccion;
+        // Puedes realizar otras operaciones aquí si es necesario
+        
+      }
+    });
+    return await modal.present();
+  }
+
+
+  reservarAsiento(destino: string) {
+    const datos: any = {
+      "pasajero_id": `${this.idPasajero}`,
+      "destino": destino,
+    };
+
+    this._viajes.reservarAsiento(this.asientoSeleccionado, datos)
+      .subscribe(
+        (data) => {
+          console.log('Asiento reservado:', data);
+          this.getViajes();
+          this.asientoSeleccionado = 0;
+        },
+        (error) => {
+          console.log('Error al reservar asiento:', error);
+          this.asientoSeleccionado = 0;
+        }
+      );
   }
 
 
@@ -109,25 +162,8 @@ export class HomePage implements OnInit {
     );
   }
 
-  reservarAsiento() {
-    const datos: any = {
-      "pasajero_id": `${this.idPasajero}`,
-      "destino": "Casa",
-    }
-    this._viajes.reservarAsiento(this.asientoSeleccionado, datos)
-      .subscribe(
-        (data) => {
-          console.log(data);
-          this.getViajes();
-          this.asientoSeleccionado = 0;
-        },
-        (error) => {
-          console.log(error);
-          console.log(datos);
-          this.asientoSeleccionado = 0;
-        }
-      );
-  }
+
+
 
   cerrarSesion() {
     this.userInfo = '';

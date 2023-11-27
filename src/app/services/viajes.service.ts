@@ -83,7 +83,8 @@ export class ViajesService {
 
 
   getAsiento(id_detalle_viaje: number): Observable<any> {
-    const URL = `${SUPABASE_URL}/detalle_viaje?id=eq.${id_detalle_viaje}`;
+    const URL = `${SUPABASE_URL}/detalle_viaje?id=eq.${id_detalle_viaje}&select=*,viaje(destino_conductor)`;
+    console.log(URL);
     const headers = new HttpHeaders({
       'apikey': `${SUPABASE_PASSWORD}`,
     });

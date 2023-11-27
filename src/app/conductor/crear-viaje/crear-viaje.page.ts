@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { VehiculoService } from 'src/app/services/vehiculo.service';
 import { ViajesService } from 'src/app/services/viajes.service';
+import { ModalService } from 'src/app/services/modal.service';
+import { EventoService } from 'src/app/services/evento.service';
 @Component({
   selector: 'app-crear-viaje',
   templateUrl: './crear-viaje.page.html',
@@ -28,6 +30,8 @@ export class CrearViajePage implements OnInit {
     private _viajes: ViajesService,
     private router: Router,
     private _auth: AuthService,
+    private modal: ModalService,
+    private eventoService: EventoService  // Inyectar el servicio de eventos
   ) { }
 
   ngOnInit() {
@@ -47,12 +51,27 @@ export class CrearViajePage implements OnInit {
               console.log(this.listaVehiculos)
             }
           );
+          this.eventoService.obtenerDestino().subscribe((destino) => {
+            if (destino) {
+              this.destino_conductor = destino;
+            }
+        });
         //Fin metodos
       } else {
         this.router.navigateByUrl('login');
       }
     });
   }
+  async seleccionarDestino() {
+    const modal = await this.modal.abrirMapa(this.destino_conductor);
+    modal.onDidDismiss().then((data: any) => {
+      // Aquí maneja los datos devueltos por el modal
+      if (data && data.destino) {
+        this.destino_conductor = data.destino;
+      }
+    });
+  }
+
 
   publicarViaje() {
     let now: Date = new Date();
@@ -64,6 +83,7 @@ export class CrearViajePage implements OnInit {
       console.log('Publicando viaje');
       this.fecha_inicio = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
       let horaInicio = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+
       const contenido: any = {
         "conductor_id": this.infoConductor.id,
         "fecha_inicio": this.fecha_inicio,

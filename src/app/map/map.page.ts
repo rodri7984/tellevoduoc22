@@ -3,6 +3,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { ServicioMapas } from '../services/maps.service';
 import { ModalController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
+import { ViajesService } from '../services/viajes.service'
+import { EventoService } from '../services/evento.service';
 
 @Component({
   selector: 'app-map',
@@ -18,6 +20,9 @@ export class MapPage {
   geocodificador: any;
   marcadorUsuario: any;
   ubicacionSeleccionada: any;
+  idPasajero: any;
+  idAsiento: string = '';
+  destino: string = '';
 
   constructor(
     private servicioMapas: ServicioMapas,
@@ -25,11 +30,22 @@ export class MapPage {
     private geolocalizacion: Geolocation,
     private controladorModal: ModalController,
     private ruta: ActivatedRoute,
+    private _viajes: ViajesService,
+    private eventoService: EventoService  // Inyectar el servicio de eventos
+
+
+
   ) {
     this.ubicacionTipo = this.ruta.snapshot.paramMap.get('ubicacionTipo');
   }
 
   ngOnInit() {
+    this.ruta.params.subscribe(params => {
+      this.idAsiento = params['idAsiento'];
+      this.destino = params['destino'];
+
+      console.log(this.destino)
+    });
     this.cargarMapa();
   }
 
@@ -61,7 +77,7 @@ export class MapPage {
         this.actualizarMarcador({ lat: center.lat(), lng: center.lng() });
         this.actualizarDireccion(center);
       });
-      
+
       mapaGoogle.event.addListener(this.mapa, 'center_changed', () => {
         const center = this.mapa.getCenter();
         this.actualizarMarcador({ lat: center.lat(), lng: center.lng() });
@@ -113,16 +129,19 @@ export class MapPage {
         title: 'Ubicación actual',
         icon: {
           url: 'assets/icon/marcador.png',
-          scaledSize: new this.mapaGoogle.Size(100,100),
+          scaledSize: new this.mapaGoogle.Size(100, 100),
         },
       });
     }
   }
 
   confirmarUbicacion() {
-    // Obtener las coordenadas del centro del mapa
     const center = this.mapa.getCenter();
 
+    const destinoSeleccionado = this.ubicacionSeleccionada.direccion;
+    this.eventoService.enviarDestino(destinoSeleccionado);
+
+    // Cierra el modal
     this.controladorModal.dismiss({
       ubicacionTipo: this.ubicacionTipo,
       ubicacionSeleccionada: {
@@ -133,5 +152,40 @@ export class MapPage {
         },
       },
     });
+
+  }
+  confirmarUbicacionConductor() {
+    this.controladorModal.dismiss({
+      destino: this.ubicacionSeleccionada.direccion,
+      // Agrega otros datos que necesitas enviar de vuelta
+    })
+
   }
 }
+  // async reservarAsiento() {
+  //   const datos: any = {
+  //     "pasajero_id": `${this.idPasajero}`,
+  //     "destino": "Casa",
+  //   }
+
+  //   this._viajes.reservarAsiento(this.asientoSeleccionado, datos)
+  //     .subscribe(
+  //       async (data) => {
+  //         console.log(data);
+  //         this.getViajes();
+  //         this.asientoSeleccionado = 0;
+
+  //         // Obtener la dirección de destino, puedes ajustar según tus datos reales
+  //         const direccionDestino = "Casa";
+
+
+
+  //         await thismodal.present();
+  //       },
+  //       (error) => {
+  //         console.log(error);
+  //         console.log(datos);
+  //         this.asientoSeleccionado = 0;
+  //       }
+  //     );
+  // }
