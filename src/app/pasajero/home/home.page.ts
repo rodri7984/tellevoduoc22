@@ -1,15 +1,18 @@
-import { NumberSymbol } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { ViajesService } from 'src/app/services/viajes.service';
+import { environment } from 'src/environments/environment';
+
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
+
+
 export class HomePage implements OnInit {
   userInfo: any = '';
   viajes: any[] = [];
@@ -25,7 +28,9 @@ export class HomePage implements OnInit {
     private router: Router
 
 
-  ) { }
+  ) {
+
+  }
 
   ngOnInit() {
 
@@ -42,8 +47,10 @@ export class HomePage implements OnInit {
 
         }, 5000);
         //Fin metodos
+
       } else {
       }
+
     });
   }
 
@@ -132,5 +139,6 @@ export class HomePage implements OnInit {
     this._auth.logout();
     this.router.navigateByUrl('login');
   }
+
 
 }

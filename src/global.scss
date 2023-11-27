@@ -24,3 +24,13 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+
+#map_canvas {
+    height: 100%;
+}
+
+capacitor-google-map {
+    display: inline-block;
+    width: 275px;
+    height: 400px;
+}
