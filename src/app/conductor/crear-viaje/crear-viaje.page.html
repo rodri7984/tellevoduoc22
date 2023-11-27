@@ -32,13 +32,13 @@
     </ion-row>
     <ion-row>
       <ng-container *ngIf="destino_conductor !== ''; else noDestino">
-        <ion-col size="5">
+        <ion-col size="10">
           <ion-item>
             <ion-label position="floating">Destino</ion-label>
             <ion-input [disabled]="true" type="text" [(ngModel)]="destino_conductor"></ion-input>
           </ion-item>
         </ion-col>
-        <ion-col size="5">
+        <ion-col size="2">
           <ion-button expand="full" color="primary" (click)="seleccionarDestino()">
             <ion-icon name="location-outline"></ion-icon>
           </ion-button>
